@@ -26,7 +26,7 @@ function daxpyJ_chunks(N, a, xval, yval)
         #first and last componenet of each chunks
         current_start = chunk_index * chunk_size + 1
         current_end = min(current_start + chunk_size - 1, N)
-
+        #local sum
         for i in current_start:current_end
             d[i] = a * x[i] + y[i]
             partial_sums[chunk_index + 1] += d[i]
@@ -50,7 +50,7 @@ The code in C is quite similar with respect to the Julia's one.
 
 ```#include <stdio.h>
 #include <stdlib.h>
-
+// vectors initialization
 void daxpyC_chunks(int N, double a, double xval, double yval) {
     double *x = (double *)malloc(N * sizeof(double));
     double *y = (double *)malloc(N * sizeof(double));
@@ -58,24 +58,26 @@ void daxpyC_chunks(int N, double a, double xval, double yval) {
     
     int chunk_size = 8;
     int number_of_chunks = (N + chunk_size - 1) / chunk_size;
+    //or    int number_of_chunks = (int) ceil((double) N / chunk_size); by addying #include <math.h>
     double *partial_sums = (double *)calloc(number_of_chunks, sizeof(double));
     
     for (int i = 0; i < N; i++) {
         x[i] = xval;
         y[i] = yval;
     }
+
     
     for (int chunk_index = 0; chunk_index < number_of_chunks; chunk_index++) {
         int current_start = chunk_index * chunk_size;
         int current_end = current_start + chunk_size;
         if (current_end > N) current_end = N;
-        
+        //local sum
         for (int i = current_start; i < current_end; i++) {
             d[i] = a * x[i] + y[i];
             partial_sums[chunk_index] += d[i];
         }
     }
-        
+    //local sum check
     double total_sum = 0.0;
     for (int i = 0; i < number_of_chunks; i++) {
         total_sum += partial_sums[i];
@@ -99,7 +101,7 @@ void daxpyC_chunks(int N, double a, double xval, double yval) {
     free(d);
     free(partial_sums);
 }
-
+//call the function
 int main(int argc, char *argv[]) {
     if (argc != 5) {
         printf("Usage: %s N a xval yval\n", argv[0]);
@@ -117,3 +119,6 @@ int main(int argc, char *argv[]) {
 }
 
 ```
+
+In this code, to split the operation into chunks, we can use either `ceil()` or `(N + chunk_size - 1) / chunk_size` by including `math.h`; both approaches are equivalent in C.
+To use the last code, simply save it, compile it, and run it by passing N, a, x, and y as arguments.
