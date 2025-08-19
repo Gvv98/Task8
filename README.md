@@ -8,7 +8,7 @@ for (int i = 0; i< N-1; i++) {
 ```
 Now, we will divide this operation into chunks: we take intervals of vectors by splitting the $N$ components into $N_{chunks}$ groups. At this point, we run a for loop for each group, and then combine everything together to get the final result.
 
-In detail, for thie exercise, we take $N_{chunks}=ceil(N/8)$, where ceil return the nearest integer numeber. Finally, we test the code by comparing the total sum of all components with the combined sum of the individual chunks.
+In detail, for this exercise, we take $N_{chunks}=ceil(N/8)$, where ``ceil`` returns the nearest integer number. Finally, we test the code by comparing the total sum of all components with the combined sum of the individual chunks.
 
 ## Code in Julia
 ```
